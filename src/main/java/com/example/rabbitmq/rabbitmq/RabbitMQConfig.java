@@ -39,7 +39,7 @@ public class RabbitMQConfig {
         //  等等等的一些东西
         // spring整合rabbitMQ的amq包，创建队列、交换机、绑定的两种方式：Builder模式，直接调用构造方法模式
 
-        QueueBuilder.durable("").withArgument("x-dead-letter-exchange", "DLX交换机名称").withArgument("x-dead-letter-routing-key", "死信交换机的路由key").autoDelete().ttl(1000 * 24).maxLength(10000).build();
+        //QueueBuilder.durable("").withArgument("x-dead-letter-exchange", "DLX交换机名称").withArgument("x-dead-letter-routing-key", "死信交换机的路由key").autoDelete().ttl(1000 * 24).maxLength(10000).build();
         /*
             Map<String,Object> map = new HashMap<>();
             map.put("x-dead-letter-exchange"，"DLX交换机名称");
