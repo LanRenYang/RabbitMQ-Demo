@@ -4,6 +4,8 @@ import org.springframework.amqp.core.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+
 
 /**
  * rabbitMQ配置
@@ -24,7 +26,28 @@ public class RabbitMQConfig {
         //  durable: 队列是否持久
         //  exclussive: 是否具有排他性 只允许创建该队列的连接访问，当该连接断开时，删除该队列
         //  autoDelete: 当最后一个消费者断开连接时，自动删除该队列
-        return new Queue("LanRen", true, false, false);
+        // x-message-ttl  设置队列过期时间，队列过期，队列中的消息全部过期
+        // x-max-length   该队列允许保存的最大消息个数
+
+        /*
+            x-dead-letter-exchange   为队列声明死信交换机(也叫DLX交换机)
+            x-dead-letter-routing-key  死信交换机所用的 routingKey
+            死信队列的全过程：
+            消息生成 ---》交换机 ---》队列 ---》消息失效 ---》DLX交换机 ---》死信队列
+         */
+
+        //  等等等的一些东西
+        // spring整合rabbitMQ的amq包，创建队列、交换机、绑定的两种方式：Builder模式，直接调用构造方法模式
+
+        QueueBuilder.durable("").withArgument("x-dead-letter-exchange", "DLX交换机名称").withArgument("x-dead-letter-routing-key", "死信交换机的路由key").autoDelete().ttl(1000 * 24).maxLength(10000).build();
+        /*
+            Map<String,Object> map = new HashMap<>();
+            map.put("x-dead-letter-exchange"，"DLX交换机名称");
+            map.put("x-dead-letter-routing-key"，"死信交换机的路由key");
+            map.put("x-message-ttl":"1000 * 1800");
+            return new Queue("LanRen", true, false, false, map);
+         */
+        return new Queue("LanRen", true, false, false, new HashMap<>());
     }
 
 
@@ -51,7 +74,7 @@ public class RabbitMQConfig {
      */
     @Bean
     public TopicExchange createTopicExchange() {
-        return new TopicExchange("LanRen-topic", true, false);
+        return new TopicExchange("LanRen-topic", true, false, new HashMap<>());
     }
 
 
