@@ -9,15 +9,16 @@ import java.io.IOException;
 
 /**
  * rabbitMQ消息消费者示例
+ * 消息消费者消费zhang-DLX死信队列
  */
 @Component
 public class AcceptMegDemo {
 
 
-    @RabbitListener(queues = "LanRen")
+    @RabbitListener(queues = "zhang-DLX")
     public void receive(Message message, Channel channel) throws InterruptedException, IOException {
         // 设置消费者只接受一条消息，在队列没有得到该消费者的回应之前，不会给该消费者再发送消息。开启能者多劳模式
-        channel.basicQos(1);
+        //channel.basicQos(1);
 
         // channel.basicConsume();
         String string = new String(message.getBody());
@@ -37,5 +38,6 @@ public class AcceptMegDemo {
         }
         string = null;
         Thread.sleep(500);
+
     }
 }

@@ -14,15 +14,22 @@ public class SendMsgDemo {
     @Autowired
     private SendMessageUtils sendMessageUtils;
 
-    @RequestMapping(value = "/sendTest", method = RequestMethod.GET)
-    public void sendTest() {
-        sendMessageUtils.send("LanRen", "发送1条消息");
+    @RequestMapping(value = "/sendQueueByString", method = RequestMethod.GET)
+    public String sendQueueByString() {
+        sendMessageUtils.sendQueueByString("LanRen", "Hello RabbitMQ，死信队列我来了！！！","60000");
+        String s = "发送成功";
+        return s;
     }
 
 
-    @RequestMapping(value = "/send", method = RequestMethod.GET)
-    public void send() {
-        sendMessageUtils.send("LanRen", "发送1条消息");
+    @RequestMapping(value = "/sendQueueByObject", method = RequestMethod.GET)
+    public String sendQueueByObject() {
+        User user = new User();
+        user.setName("邓");
+        user.setAge(18);
+        user.setNum("12311");
+        sendMessageUtils.sendQueueByObject("Yang", user,"60000");
+        return "发送成功";
     }
 
 
