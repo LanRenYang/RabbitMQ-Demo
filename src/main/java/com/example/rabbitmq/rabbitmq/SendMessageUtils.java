@@ -71,14 +71,27 @@ public class SendMessageUtils {
     public void sendExchangeByObject(String exchangeName, String routingKey, Object message, String ttl) {
         // 通过交换机发送消息给队列  --》 传参交换机名字、匹配规则、消息信息
         //rabbitTemplate.convertAndSend(exchangeName, routingKey, message);
-        rabbitTemplate.convertAndSend(exchangeName, routingKey, message, new MessagePostProcessor() {
-            @Override
-            public Message postProcessMessage(Message message) throws AmqpException {
-                if (ttl != null) {
-                    message.getMessageProperties().setExpiration("60000");
+//        rabbitTemplate.convertAndSend(exchangeName, routingKey, message, new MessagePostProcessor() {
+//            @Override
+//            public Message postProcessMessage(Message message) throws AmqpException {
+//                if (ttl != null) {
+//                    message.getMessageProperties().setExpiration("60000");
+//                }
+//                return message;
+//            }
+//        });
+
+
+        /*
+            lambda表达式替换匿名内部类 语法：
+                (...) -> {
+                    ...
                 }
-                return message;
-            }
+                以 “->” 为间隔，左边是要实现方法的参数申明，右边是要实现方法的具体代码
+         */
+        rabbitTemplate.convertAndSend(exchangeName, routingKey, message, message1 -> {
+            message1.getMessageProperties().setExpiration("60000");
+            return message1;
         });
     }
 

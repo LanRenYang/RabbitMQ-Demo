@@ -31,10 +31,4 @@ public class User implements Serializable {
         this.num = num;
     }
 
-
-    public static void main(String[] args) {
-        User user = new User();
-        System.out.println(user);
-        System.out.println(user.getName());
-    }
 }
