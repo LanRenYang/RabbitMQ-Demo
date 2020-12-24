@@ -22,6 +22,7 @@ public class AcceptMegDemo {
 
         // channel.basicConsume();
         String string = new String(message.getBody());
+        // 如果使用了手动应答模式，消息被取出之后由 ready状态 ---> unacked状态。unacked模式下的消息如果得不到消息消费者的应答就会一直处于unacked状态。
         if (string.contains("6")) {
             System.out.println("消费失败：------>" + string);
             // //消费失败用basicNack()回应，告诉队列的处理办法，
