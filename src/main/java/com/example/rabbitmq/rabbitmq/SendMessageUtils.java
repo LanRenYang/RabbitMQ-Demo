@@ -37,6 +37,23 @@ public class SendMessageUtils {
         }
         Message messagea = new Message(message.getBytes(), messageProperties);
         //  send(String routingKey, Message message)   routingKey接受队列名称或交换机匹配规则 和 message对象
+        // 设置确认机制
+        rabbitTemplate.setConfirmCallback(new RabbitTemplate.ConfirmCallback() {
+            /**
+            * MQ服务器回调逻辑
+            * @param correlationData 消息信息
+            * @param b 投递结果。true表示投递成功，false表示投递失败
+            * @param s 投递失败原因
+            */
+            @Override
+            public void confirm(CorrelationData correlationData, boolean b, String s) {
+                if (b) {
+                    System.out.println("投递成功！");
+                } else {
+                    // 做补偿处理
+                    System.out.println("投递失败！");
+                }
+             }});
         rabbitTemplate.send(queueName, messagea);
     }
 
@@ -94,6 +111,7 @@ public class SendMessageUtils {
             return message1;
         });
     }
+    
 
 
     /**
